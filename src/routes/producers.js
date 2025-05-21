@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { getProducerIntervals } = require('../controllers/producersController');
+const { getProducerIntervalsHandler } = require('../controllers/producersController');
 
-router.get('/intervals', getProducerIntervals);
+router.get('/intervals', getProducerIntervalsHandler);
 
 module.exports = router;

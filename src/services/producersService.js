@@ -1,6 +1,6 @@
 const { DB } = require('../db');
 
-function fetchProducersWithIntervals() {
+function getProducerIntervals() {
   return new Promise((resolve, reject) => {
     DB.all(`SELECT year, producers FROM movies WHERE LOWER(winner) = 'yes'`, [], (err, rows) => {
       if (err) 
@@ -9,6 +9,9 @@ function fetchProducersWithIntervals() {
       const producerMap = {};
 
       rows.forEach(({ year, producers }) => {
+        if (!producers || typeof producers !== 'string') 
+          return;
+        
         const names = producers.split(/,| and /).map(p => p.trim());
 
         names.forEach(name => {
@@ -49,5 +52,5 @@ function fetchProducersWithIntervals() {
 }
 
 module.exports = {
-  fetchProducersWithIntervals
+  getProducerIntervals
 };

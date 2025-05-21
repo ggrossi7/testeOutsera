@@ -1,8 +1,8 @@
-const { fetchProducersWithIntervals } = require('../services/producersService');
+const { getProducerIntervals } = require('../services/producersService');
 
-async function getProducerIntervals(req, res) {
+async function getProducerIntervalsHandler(req, res) {
   try {
-    const result = await fetchProducersWithIntervals();
+    const result = await getProducerIntervals();
     res.json(result);
   } catch (error) {
     console.error('Erro no controller:', error);
@@ -11,5 +11,5 @@ async function getProducerIntervals(req, res) {
 }
 
 module.exports = {
-  getProducerIntervals
+  getProducerIntervalsHandler
 };
