@@ -22,28 +22,49 @@ afterAll(async () => {
 });
 
 describe('GET /producers/intervals', () => {
-  it('deve retornar produtores com maior e menor intervalo entre prêmios', async () => {
+  it('deve retornar os produtores com maior e menor intervalo entre prêmios baseado no CSV', async () => {
     const res = await request(app)
       .get('/producers/intervals')
       .expect(200);
 
-    expect(res.body).toHaveProperty('min');
-    expect(res.body).toHaveProperty('max');
-    expect(Array.isArray(res.body.min)).toBe(true);
-    expect(Array.isArray(res.body.max)).toBe(true);
+    const { min, max } = res.body;
 
-    if (res.body.min.length > 0) {
-      expect(res.body.min[0]).toHaveProperty('producer');
-      expect(res.body.min[0]).toHaveProperty('interval');
-      expect(res.body.min[0]).toHaveProperty('previousWin');
-      expect(res.body.min[0]).toHaveProperty('followingWin');
-    }
+    expect(Array.isArray(min)).toBe(true);
+    expect(Array.isArray(max)).toBe(true);
 
-    if (res.body.max.length > 0) {
-      expect(res.body.max[0]).toHaveProperty('producer');
-      expect(res.body.max[0]).toHaveProperty('interval');
-      expect(res.body.max[0]).toHaveProperty('previousWin');
-      expect(res.body.max[0]).toHaveProperty('followingWin');
-    }
+    min.forEach(item => {
+      expect(item).toHaveProperty('producer');
+      expect(item).toHaveProperty('interval');
+      expect(item).toHaveProperty('previousWin');
+      expect(item).toHaveProperty('followingWin');
+    });
+
+    max.forEach(item => {
+      expect(item).toHaveProperty('producer');
+      expect(item).toHaveProperty('interval');
+      expect(item).toHaveProperty('previousWin');
+      expect(item).toHaveProperty('followingWin');
+    });
+
+    const expectedMin = [
+      {
+        producer: 'Joel Silver',
+        interval: 1,
+        previousWin: 1990,
+        followingWin: 1991
+      }
+    ];
+
+    const expectedMax = [
+      {
+        producer: 'Matthew Vaughn',
+        interval: 13,
+        previousWin: 2002,
+        followingWin: 2015
+      }
+    ];
+
+    expect(min).toEqual(expectedMin);
+    expect(max).toEqual(expectedMax);
   });
 });

@@ -31,21 +31,28 @@ function getProducerIntervals() {
         const sorted = years.sort((a, b) => a - b);
         
         for (let i = 1; i < sorted.length; i++) {
-          intervals.push({
-            producer,
-            interval: sorted[i] - sorted[i - 1],
-            previousWin: sorted[i - 1],
-            followingWin: sorted[i]
-          });
+          const interval = sorted[i] - sorted[i - 1];
+          if (interval > 0) {
+            intervals.push({
+              producer,
+              interval,
+              previousWin: sorted[i - 1],
+              followingWin: sorted[i]
+            });
+          }
         }
       }
 
-      const min = Math.min(...intervals.map(i => i.interval));
-      const max = Math.max(...intervals.map(i => i.interval));
+      if (intervals.length === 0) {
+        return resolve({ min: [], max: [] });
+      }
+
+      const minInterval = Math.min(...intervals.map(i => i.interval));
+      const maxInterval = Math.max(...intervals.map(i => i.interval));
 
       resolve({
-        min: intervals.filter(i => i.interval === min),
-        max: intervals.filter(i => i.interval === max)
+        min: intervals.filter(i => i.interval === minInterval),
+        max: intervals.filter(i => i.interval === maxInterval)
       });
     });
   });
